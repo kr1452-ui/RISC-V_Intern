@@ -1,79 +1,90 @@
-# Task-3: UART Driver Library + Application  
-**Board:** VSDSquadron 
+# Task-3: UART Driver Library and Application – VSDSquadron Mini
+
+## Implemented Library
+
+For Task-3, I implemented a reusable UART driver library for the CH32V003 microcontroller on the VSDSquadron Mini board.
+
+This library handles all USART hardware configuration and provides simple APIs for transmitting and receiving data using polling mode. All register-level configuration is done inside the library as required by the task rules. The application code does not access any registers directly.
 
 ---
 
-##  What was implemented?
+## UART Library APIs
 
-For Task-3, I implemented a **UART Driver Library** and demonstrated its usage through a small application running on the VSDSquadron Mini board.
+The following APIs were designed and implemented:
 
-The goal was to create reusable UART APIs and build a working demo that proves UART transmit, receive, and command handling on real hardware.
+- uart_init(uint32_t baudrate)  
+  Initializes USART1 with the given baud rate using PD5 as TX and PD6 as RX.
 
-All hardware-level register configuration is kept **inside the library**, and the application only calls library functions as required by the task rules.
+- uart_send_char(char c)  
+  Sends a single character over UART in blocking mode.
 
----
+- uart_send_string(const char *str)  
+  Sends a string of characters over UART.
 
-##  UART Library APIs
+- uart_receive_char(void)  
+  Receives a single character using polling.
 
-| API | Purpose |
-|-----|--------|
-| `uart_init(uint32_t baudrate)` | Initializes USART1 on PD5 (TX) and PD6 (RX) |
-| `uart_send_char(char c)` | Sends one character (blocking) |
-| `uart_send_string(const char *str)` | Sends a string over UART |
-| `uart_receive_char(void)` | Receives a character using polling |
-
-These APIs are reusable and can be used in any future project involving UART communication.
+These functions make the UART driver reusable for other applications.
 
 ---
 
-##  Demo Application
+## Demo Application Description
 
-The application demonstrates two main features:
+A small application was developed to demonstrate the use of the UART library.
 
-### 1️ UART Echo
-- Any key typed in PuTTY is received by the board
-- The same character is transmitted back
-- RX and TX logs are clearly printed on the terminal
+When the board is powered and connected to PuTTY:
 
-### 2️ Command-based LED Control
-- When the character `'1'` is received, an external LED connected to **PD4** toggles ON/OFF
-- A message **"LED Toggled"** is printed on UART
+- The message "UART Echo Ready" is displayed.
+- Any character typed in PuTTY is received by the board and sent back.
+- The UART log clearly shows both received and transmitted characters.
+- When the character '1' is sent from PuTTY, an external LED connected to PD4 toggles ON and OFF.
+- A message "LED Toggled" is printed on the serial terminal.
 
-This proves practical use of UART RX, TX, and command handling.
-
----
-
-##  Hardware Connections
-
-| VSDSquadron Pin | Connection |
-|------------------|------------|
-| PD5 (TX) | RX of USB-TTL |
-| PD6 (RX) | TX of USB-TTL |
-| GND | GND of USB-TTL |
-| PD4 | LED → 330Ω → GND |
-
-> Note: The onboard user LED could not be used because it shares PD6 with UART RX. Hence, PD4 was used for LED demonstration.
+This demonstrates UART receive, UART transmit, and command-based control using the driver library.
 
 ---
 
-##  How to Build and Flash
+## Hardware Connections
 
-1. Open the project in VSCode using PlatformIO
-2. Click **Build**
-3. Connect the board using USB-C
-4. Click **Upload**
+The following connections were used for testing:
+
+- PD5 (TX) of VSDSquadron Mini connected to RX of USB-TTL adapter
+- PD6 (RX) of VSDSquadron Mini connected to TX of USB-TTL adapter
+- GND connected between both devices
+- External LED connected to PD4 through a 330 ohm resistor to GND
+
+The onboard user LED could not be used because it shares the same pin as UART RX (PD6).
 
 ---
 
-##  UART (PuTTY) Settings
+## How to Build and Flash the Firmware
 
-| Setting | Value |
-|----------|------|
-| Baud Rate | 9600 |
-| Data Bits | 8 |
-| Stop Bits | 1 |
-| Parity | None |
-| Flow Control | None |
+1. Open the project in VSCode using PlatformIO.
+2. Click Build to compile the project.
+3. Connect the VSDSquadron Mini board using USB-C.
+4. Click Upload to flash the firmware onto the board.
 
-After pressing reset, the terminal shows:
+---
 
+## UART Configuration in PuTTY
+
+PuTTY was configured with the following settings:
+
+- Baud rate: 9600
+- Data bits: 8
+- Stop bits: 1
+- Parity: None
+- Flow control: None
+
+After resetting the board, the UART output appears in PuTTY.
+
+---
+
+## Project Structure
+
+The project is organized so that the UART driver and the application code are clearly separated:
+
+- The UART driver files are inside the `lib/uart_driver` folder.
+- The application logic is inside `src/main.c`.
+
+This structure follows the Task-3 requirement of separating library code from application code.
