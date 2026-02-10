@@ -25,6 +25,15 @@ The goal was not just to make things work, but to follow proper embedded firmwar
 - Demonstrated command-based LED toggling using serial input.
 - Structured the project to clearly separate library code and application code.
 
+### Task 4 – Multi-Driver Integration Project
+ - Worked with multiple peripherals together such as GPIO, UART, Timer, and PWM.
+ - Understood how different drivers work together in one embedded application.
+ - Focused on modular firmware design and system structure.
+
+### Task 5 – Industry-Standard Documentation
+- Documented the Task-3 project in a professional format.
+- Created documentation files like README, API reference, architecture, application guide, demo guide, and changelog.
+- Learned how embedded firmware projects are documented so that other engineers can reuse the work easily.
 ---
 
 ## Skills Learned
