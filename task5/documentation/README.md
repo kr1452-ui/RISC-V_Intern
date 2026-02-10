@@ -16,7 +16,7 @@ The application uses this library to create an interactive UART session where re
 
 * VSDSquadron Mini board
 * USB-TTL adapter
-* External LED on PD4 with 330Ω resistor
+* External LED on PD4 with 220Ω resistor
 
 ## Project Structure
 
