@@ -1,165 +1,180 @@
-Task-4: Software PWM Multi-Channel LED Dimmer
 
-VSDSquadron Mini – CH32V003 (RISC-V)
 
-1. Project Overview
+# Task-4: Software PWM Multi-Channel LED Dimmer
 
-This project demonstrates software-based PWM (Pulse Width Modulation) on the VSDSquadron Mini board when hardware PWM channels are limited.
+**VSDSquadron Mini (CH32V003F4U6)**
 
-Multiple LEDs are dimmed using timer interrupts, and each LED has an independent duty cycle.
+---
 
-The goal of this task is to show multi-driver integration using:
+## 1. Project Overview
 
-GPIO driver
+This project implements a **software-based PWM (Pulse Width Modulation) LED dimmer** on the **VSDSquadron Mini** board.
 
-Timer driver
+Since the microcontroller has limited hardware PWM channels, PWM is generated **in software** using a **timer interrupt**. Multiple LEDs are controlled independently using GPIO pins.
 
-UART driver (integrated)
+This project is developed as part of **Task-4: Multi-Driver Integration**.
 
-This project runs on real hardware and produces visible LED dimming.
+---
 
-2. Hardware Used
+## 2. Objective
 
-Board: VSDSquadron Mini
+The main objectives of Task-4 are:
 
-MCU: CH32V003F4U6 (RISC-V, 24 MHz)
+* Integrate multiple drivers into a single working application
+* Run the application on **real hardware**
+* Demonstrate timer interrupts, GPIO control, and clean driver separation
 
-Power: USB-C
+This project demonstrates:
 
-LEDs: 2 external LEDs on breadboard
+* GPIO driver usage
+* Timer driver usage
+* Software PWM logic
+* Real hardware LED dimming
 
-Resistors: 220Ω 
+---
 
-LED Connections
-LED	MCU Pin
-LED1	PD3
-LED2	PD4
+## 3. Hardware Used
 
-Wiring for each LED:
+* **Board**: VSDSquadron Mini
+* **MCU**: CH32V003F4U6 (RISC-V, 24 MHz)
+* **Power Supply**: USB-C
 
+### External LEDs
+
+| LED  | GPIO Pin |
+| ---- | -------- |
+| LED1 | PD3      |
+| LED2 | PD4      |
+
+* **Resistors**: 220Ω 
+* **Breadboard**
+
+### LED Connection
+
+Each LED is connected as:
+
+```
 MCU GPIO → Resistor → LED → GND
+```
 
-3. Drivers Used
-GPIO Driver
+---
 
-Initializes GPIO pins as output
+## 4. Software PWM Explanation
 
-Turns LEDs ON and OFF
+Hardware PWM is not used in this project. Instead, PWM is generated using a **timer interrupt**.
 
-No direct register access in main.c
+### PWM Logic
 
-Timer Driver
+* Timer interrupt interval: **100 µs**
+* PWM counter range: **0 to 99**
+* One full PWM cycle = `100 × 100 µs = 10 ms`
+* PWM frequency = **100 Hz**
 
-Uses TIM2 interrupt
+For each LED, the logic is:
 
-Generates periodic interrupts
-
-Implements software PWM logic
-
-UART Driver
-
-Implemented as a separate driver
-
-Initialized for driver integration
-
-Not used for live control in final demo (USB-TTL removed to avoid pin conflict)
-
-4. Software PWM Implementation
-
-Hardware PWM is not used.
-PWM is generated in software using a timer interrupt.
-
-PWM logic:
-
-Timer interrupt every 100 µs
-
-PWM counter runs from 0 to 99
-
-One full PWM cycle = 10 ms
-
-PWM frequency = 100 Hz
-
-Core logic:
-
-A 100 µs timer interrupt increments a counter from 0–99. Each LED compares this counter with its duty cycle to generate 100 Hz software PWM.
-
-Example behavior:
-
+```c
 if (pwm_counter < duty)
-    LED ON
+    LED ON;
 else
-    LED OFF
+    LED OFF;
+```
+
+### Important Explanation Line (Task-4 Requirement)
+
+> A 100 µs timer interrupt increments a counter from 0–99. Each LED compares this counter with its duty cycle to generate 100 Hz software PWM.
+
+---
+
+## 5. Drivers Used
+
+### GPIO Driver
+
+* Initializes GPIO pins (PD3, PD4) as output pins
+* Provides APIs to turn LEDs ON and OFF
+
+### Timer Driver
+
+* Configures TIM2 to generate a 100 µs interrupt
+* Maintains a PWM counter
+* Generates software PWM inside the interrupt service routine (ISR)
+
+### UART Driver
+
+* Implemented as part of driver integration
+* Not used for live control in the final demo
+* Included to satisfy the multi-driver integration requirement
+
+---
+
+## 6. Folder Structure (Task-4 Compliant)
+
+```
+task4/
+└── submission/
+    ├── app/
+    │   └── main.c
+    ├── lib/
+    │   ├── gpio_driver.c
+    │   ├── gpio_driver.h
+    │   ├── timer_driver.c
+    │   ├── timer_driver.h
+    │   ├── uart_driver.c
+    │   ├── uart_driver.h
+    ├── README.md
+    └── evidence.md
+```
+
+---
+
+## 7. `main.c` Responsibility
+
+`main.c` contains **only application-level logic**, as required by Task-4:
+
+* Driver initialization
+* No direct register access
+* No hardware configuration
+
+PWM generation is fully handled inside the **timer driver ISR**.
+
+---
+
+## 8. Demo Description
+
+* Board powered using **USB-C**
+* Two external LEDs connected to **PD3 and PD4**
+* LEDs glow at **different brightness levels**
+* Visible brightness difference confirms software PWM operation
+
+USB-TTL is **not connected** during the final demo to avoid pin conflicts.
+
+---
+
+## 9. How to Build and Upload
+
+Using **PlatformIO**:
+
+1. Open the project
+2. Clean the build
+3. Build the project
+4. Upload the firmware
+5. Observe LED brightness on the hardware
+
+---
+
+## 10. Result
+
+* Software PWM works correctly
+* Timer interrupt operation verified
+* GPIO control verified
+* Multi-driver integration achieved
+* All Task-4 requirements satisfied
+
+---
+
+## 11. Conclusion
+
+This project successfully demonstrates a **software-based PWM LED dimmer** implemented using timer interrupts on real hardware.
 
 
-Different duty values produce different brightness levels.
+---
 
-5. Application Flow (main.c)
-
-main.c contains only application logic:
-
-Initializes GPIO driver
-
-Initializes timer driver
-
-Enters infinite loop
-
-PWM is fully handled inside timer ISR
-
-There is no register-level code in main.c.
-
-6. Demo Description
-
-For the final demo:
-
-USB-TTL is disconnected
-
-Board is powered using USB-C
-
-Two external LEDs are connected
-
-Fixed duty cycles are used
-
-LEDs show clearly different brightness levels
-
-This demonstrates:
-
-Timer interrupt working
-
-Software PWM working
-
-GPIO control working
-
-Real hardware execution
-
-
-
-7. How to Build and Flash
-
-Open project in PlatformIO
-
-Connect VSDSquadron Mini via USB-C
-
-Run:
-
-Clean
-
-Build
-
-Upload
-
-Observe LED brightness on breadboard
-
-8. Result
-
-LEDs show different brightness levels
-
-No flicker
-
-Stable output
-
-Task-4 requirements satisfied
-
-Conclusion
-
-This project successfully demonstrates software PWM using timer interrupts with clean driver abstraction.
-It fulfills all Task-4 requirements for multi-driver integration on real hardware.
