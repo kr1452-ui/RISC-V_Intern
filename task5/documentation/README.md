@@ -22,6 +22,8 @@ The application uses this library to create an interactive UART session where re
 
 ```
 lib/
+ └── led_driver.c
+ └── led_driver.h
  └── uart_driver.c
  └── uart_driver.h
 
