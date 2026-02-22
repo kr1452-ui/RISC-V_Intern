@@ -8,12 +8,12 @@ The output includes board name, firmware version, and a continuously increasing 
 
 ### Proof
 - Screenshot showing 10+ UART lines
-- Video recording showing live UART output
+
 
 
 <img width="421" height="311" alt="output terminal" src="https://github.com/user-attachments/assets/1f06fd3c-2c5b-49f3-b2c0-4aa4ee7894b1" />
 
-https://github.com/user-attachments/assets/c63d4a49-6110-4bec-b166-22b446a7fbdc
+
 
 ---
 
