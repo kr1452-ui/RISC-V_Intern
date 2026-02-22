@@ -87,7 +87,7 @@ task3/submission/
 * lib/ → uart_driver + led_driver
 * app/ → main.c
 * README.md
-* evidence.md
+* evidence → evidence.md
 
 ---
 
