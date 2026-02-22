@@ -22,11 +22,10 @@ The application uses this library to create an interactive UART session where re
 
 ```
 lib/
- └── uart_driver/
-      ├── uart_driver.c
-      └── uart_driver.h
+ └── uart_driver.c
+ └── uart_driver.h
 
-src/
+app/
  └── main.c
 ```
 
