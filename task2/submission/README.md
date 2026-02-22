@@ -73,5 +73,5 @@ This structure mirrors real-world embedded firmware design.
 ---
 
 ## Evidence
-All hardware execution proof (UART logs, GPIO toggling photos/videos) is provided in **evidence.md**.
+All hardware execution proof (UART logs, GPIO toggling photos/videos) is provided in **submission.md**.
 
